@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a519007afa1a67419edf121e2c5a9f7, type: 3}
+  m_Name: DummyDialogue
+  m_EditorClassIdentifier: Assembly-CSharp::NpcDialogue
+  npcName: Durr
+  npcPortrait: {fileID: 4723107735738678597, guid: b87ab688e87bfcb4592cddf91d2a57f4, type: 3}
+  dialogueLines:
+  - Hello, it's me, mario
+  - You know how it be
+  typingSpeed: 0.025
+  voiceSound: {fileID: 8300000, guid: 32ff435ae2c92fb428c04e7f40667c59, type: 3}
+  voicePitch: 1
+  autoProgress: 0000
+  autoProgressDelay: 1.5
