@@ -15,7 +15,9 @@ public class Player : MonoBehaviour
     public PlayerCrouchState crouchState;
     public PlayerSlideState slideState;
     public PlayerAttackState attackState;
+    public PlayerSpecialState specialState;
     public PlayerSpellcastState spellcastState;
+    public PlayerAirAttackState airAttackState;
 
     public float maxHealth = 20.0f;
     public float health = 20.0f;
@@ -26,6 +28,10 @@ public class Player : MonoBehaviour
     public float currentSpeed;
     public bool runPressed;
     public float sideFacing = 1;
+    public float[] damage;
+    public GameObject[] damageObjects;
+    public int damageObjectCurrent;
+    public float dealtDamage = 3;
 
     [Header("Core Components")]
     public Health playerHealth;
@@ -70,6 +76,7 @@ public class Player : MonoBehaviour
     private bool isSliding;
 
     public bool attackPressed;
+    public bool specialPressed;
     public bool spellPressed;
 
     [Header("Fire")]
@@ -91,7 +98,9 @@ public class Player : MonoBehaviour
         crouchState = new PlayerCrouchState(this);
         slideState = new PlayerSlideState(this);
         attackState = new PlayerAttackState(this);
+        specialState = new PlayerSpecialState(this);
         spellcastState = new PlayerSpellcastState(this);
+        airAttackState = new PlayerAirAttackState(this);
     }
     void Start()
     {
@@ -112,7 +121,7 @@ public class Player : MonoBehaviour
     }
     void HandleDamage()
     {
-        Debug.Log("Yay");
+        //Debug.Log("Yay");
     }
     public void ChangeState (PlayerState newState)
     {
@@ -147,6 +156,10 @@ public class Player : MonoBehaviour
     public void OnAttack(InputValue value)
     {
         attackPressed = value.isPressed;
+    }
+    public void OnSpecial(InputValue value)
+    {
+        specialPressed = value.isPressed;
     }
     public void OnSpellcast(InputValue value)
     {
@@ -230,7 +243,11 @@ public class Player : MonoBehaviour
         Gizmos.color = Color.green;
         //Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
-
+    public void CutsceneIdle()
+    {
+        moveInput.x = 0;
+        runPressed = false;
+    }
     public void BeginFire()
     {
         if (fire != true)
@@ -250,12 +267,12 @@ public class Player : MonoBehaviour
         {
             Invoke("TakeFire", 1.5f);
             fireStacks--;
-            playerHealth.ChangeHealth(-1, false);
+            playerHealth.ChangeHealth(-1, false, Color.red);
         }
         else if (fireStacks == 0)
         {
             fireStacks--;
-            playerHealth.ChangeHealth(-1, false);
+            playerHealth.ChangeHealth(-1, false, Color.red);
         }
         //Debug.Log(health);
     }

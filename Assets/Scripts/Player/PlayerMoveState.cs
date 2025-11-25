@@ -19,8 +19,20 @@ public class PlayerMoveState : PlayerState
         if (SpellPressed && magic.canCast)
             player.ChangeState(player.spellcastState);
 
-        else if(AttackPressed && combat.CanAttack)
+        else if (AttackPressed && combat.CanAttack)
+        {
             player.ChangeState(player.attackState);
+            player.dealtDamage = player.damage[0];
+            player.damageObjectCurrent = 0;
+            anim.SetBool("IsAttacking", true);
+        }
+        else if (SpecialPressed && combat.CanAttack)
+        {
+            player.ChangeState(player.specialState);
+            player.dealtDamage = player.damage[1];
+            player.damageObjectCurrent = 1;
+            anim.SetBool("IsSpecialing", true);
+        }
 
         else if (JumpPressed)
             player.ChangeState(player.jumpState);

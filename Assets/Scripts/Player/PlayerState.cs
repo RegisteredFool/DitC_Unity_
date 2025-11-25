@@ -14,6 +14,8 @@ public abstract class PlayerState
     protected Vector2 MoveInput => player.moveInput;
     protected float SideFacing => player.sideFacing; 
     protected bool AttackPressed => player.attackPressed;
+    protected bool SpecialPressed => player.specialPressed;
+    //protected float Damage => player.damage;
     protected bool SpellPressed => player.spellPressed;
     public PlayerState(Player player)
     {

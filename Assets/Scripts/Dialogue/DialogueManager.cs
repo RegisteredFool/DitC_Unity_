@@ -69,8 +69,6 @@ public class DialogueManager : MonoBehaviour
 
         dialogueHolder.GetComponent<RectTransform>().position = new Vector2(dialogueHolder.GetComponent<RectTransform>().position.x, offset);
         LeanTween.moveY(dialogueHolder.GetComponent<RectTransform>(), -359, timeOffset).setEaseOutQuad();
-        //dialogueText.GetComponent<RectTransform>().position = new Vector2(dialogueText.GetComponent<RectTransform>().position.x, offset);
-        //LeanTween.moveY(dialogueText.GetComponent<RectTransform>(), -299  , timeOffset); 
 
         foreach (var node in RuntimeGraph[dialogueIndex].AllNodes)
         {
@@ -80,6 +78,7 @@ public class DialogueManager : MonoBehaviour
         {
             ShowNode(RuntimeGraph[dialogueIndex].EntryNodeID);
             //Time.timeScale = 0;
+            player.GetComponent<Player>().CutsceneIdle();
             player.GetComponent<PlayerInput>().DeactivateInput();
             Debug.Log("wow");
         }
@@ -181,7 +180,7 @@ public class DialogueManager : MonoBehaviour
         }
         Time.timeScale = 1.0f;
         player.GetComponent<PlayerInput>().ActivateInput();
-
+        GetComponentInParent<Enemy>().isTalking = false;
     }
 
     private IEnumerator TypeDialogueText(string p)

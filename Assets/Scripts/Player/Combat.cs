@@ -39,32 +39,15 @@ public class Combat : MonoBehaviour
     public void Attack()
     {
         SFXManager.instance.PlaySound(hitSFX, transform.position, vol);
-        // if (!CanAttack)
-        //return;
-        nextAttackTime = Time.time + attackCooldown;
 
-        Collider2D[] enemy = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, enemyLayer);
-        if (enemy != null)
-        {
-            int counter = 0;
-            foreach (Collider2D col in enemy)
-            {
-                hitFX.Play("Active");
-                if (enemy[counter].gameObject.TryGetComponent<Health>(out var health))
-                    health.ChangeHealth(-damage, true);
-                counter++;
-            }
-            if (player.fire == true)
-            {
-                counter = 0;
-                foreach (Collider2D col in enemy)
-                {
-                    if (enemy[counter].gameObject.TryGetComponent<Health>(out var health))
-                        health.TakeFire();
-                    counter++;
-                }
-            }
-        }
+        float sideFace = player.sideFacing;
+        GameObject attacker = Instantiate(player.damageObjects[player.damageObjectCurrent]);
+        attacker.transform.localScale = new Vector2(attacker.GetComponent<DamagingScript>().posScale * sideFace, attacker.GetComponent<DamagingScript>().posScaleY);
+        attacker.transform.position = new Vector2(player.transform.position.x + attacker.GetComponent<DamagingScript>().posX * sideFace, player.transform.position.y + attacker.GetComponent<DamagingScript>().posY);
+        
+        attacker.GetComponent<DamagingScript>().Damage(enemyLayer, player, hitFX);
+        Destroy(attacker, .25f);
+        nextAttackTime = Time.time + attackCooldown;
     }
     public void Interact()
     {
@@ -72,8 +55,10 @@ public class Combat : MonoBehaviour
         if (interact != null)
         {
             interact.GetComponent<DialogueManager>().BeginDialogue();
+            interact.GetComponent<Enemy>().isTalking = true;
         }
     }
+    
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attackPoint.position, attackRadius);

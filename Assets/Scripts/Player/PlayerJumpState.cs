@@ -32,6 +32,21 @@ public class PlayerJumpState : PlayerState
             else
                 SFXManager.instance.PlaySoundAdjust(player.jumpSFX, player.transform.position, 1f, 1f);
         }
+
+        if (AttackPressed && combat.CanAttack)
+        {
+            //player.ChangeState(player.attackState);
+            //player.dealtDamage = player.damage[0];
+            //player.damageObjectCurrent = 0;
+            //anim.SetBool("IsAttacking", true);
+        }
+        else if (SpecialPressed && combat.CanAttack)
+        {
+            player.ChangeState(player.airAttackState);
+            player.dealtDamage = player.damage[2];
+            player.damageObjectCurrent = 1;
+            anim.SetBool("IsSpecialing", true);
+        }
     }
     public override void FixedUpdate()
     {

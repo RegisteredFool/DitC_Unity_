@@ -12,26 +12,41 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float torque = 5;
     [SerializeField] private float lifetime = 5;
     //[SerializeField] private Healthbar healthbar;
+    private Transform playerTransform;
 
     [SerializeField] private int fireStacks = 3;
     private bool onFire;
     private int childFire; //using this to identify which child object the particles are so we always destroy that one 
     [SerializeField] private ParticleSystem fireParticles;
+    [SerializeField] private GameObject arrowIndication;
+    public bool isTalking = false;
 
     private void OnEnable()
     {
         health.OnDamaged += HandleDamage;
         health.OnDeath += HandleDeath;
         health.OnFire += HandleFire;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
-
+    private void Update()
+    {
+        InteractDistance();
+    }
     private void OnDisable()
     {
         health.OnDamaged -= HandleDamage;
         health.OnDeath -= HandleDeath;
         health.OnFire -= HandleFire;
     }
-
+    private void InteractDistance()
+    {
+        if ((Vector2.Distance(playerTransform.position, transform.position) < 5) && (isTalking == false))
+        {
+            arrowIndication.SetActive(true);
+        }
+        else
+            arrowIndication.SetActive(false);
+    }
     public void HandleDamage()
     {
         anim.SetTrigger("IsDamaged");
@@ -68,12 +83,12 @@ public class Enemy : MonoBehaviour
             {
                 fireStacks--;
                 Invoke("HandleFire", 1.5f);
-                health.ChangeHealth(-1, false);
+                health.ChangeHealth(-1, false, Color.red);
             }
             else if (fireStacks < 0)
             {
                 fireStacks = 3;
-                health.ChangeHealth(-1, false);
+                health.ChangeHealth(-1, false, Color.red);
                 onFire = false;
                 Transform child = transform.GetChild(childFire);
                 Destroy(child.gameObject);

@@ -16,7 +16,19 @@ public class PlayerIdleState : PlayerState
             player.ChangeState(player.spellcastState);
 
         else if (AttackPressed && combat.CanAttack)
+        {
             player.ChangeState(player.attackState);
+            player.dealtDamage = player.damage[0];
+            player.damageObjectCurrent = 0;
+            anim.SetBool("IsAttacking", true);
+        }
+        else if (SpecialPressed && combat.CanAttack)
+        {
+            player.ChangeState(player.specialState);
+            player.dealtDamage = player.damage[1];
+            player.damageObjectCurrent = 1;
+            anim.SetBool("IsSpecialing", true);
+        }
 
         else if (player.jumpPressed)
             player.ChangeState(player.jumpState);

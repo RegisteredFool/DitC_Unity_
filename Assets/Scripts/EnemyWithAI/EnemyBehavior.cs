@@ -192,13 +192,13 @@ public class EnemyBehavior : MonoBehaviour
             {
                 fireStacks--;
                 Invoke("HandleFire", 1.5f);
-                health.ChangeHealth(-1, false);
+                health.ChangeHealth(-1, false, Color.red);
                 //health.health--;
                 //health.UpdateHealthbar(health.health, health.maxHealth);
             }
             else if (fireStacks == 0 && onFire == true)
             {
-                health.ChangeHealth(-1, false);
+                health.ChangeHealth(-1, false, Color.red);
                 onFire = false;
                 fireStacks--;
                 Transform child = transform.GetChild(childFire);
@@ -209,15 +209,12 @@ public class EnemyBehavior : MonoBehaviour
     }
     public void Attacking()
     {
-        Debug.Log("First Part");
         Collider2D player = Physics2D.OverlapCircle(attackPoint.position, attackRadius, playerLayer);
         if (player != null)
         {
-            Debug.Log("Second Part");
-            player.gameObject.GetComponent<Health>().ChangeHealth(-damage, true);
+            player.gameObject.GetComponent<Health>().ChangeHealth(-damage, true, Color.white);
             if (onFire == true)
             {
-                Debug.Log("Fire Part");
                 player.gameObject.GetComponent<Player>().TakeFire();
             }
         }

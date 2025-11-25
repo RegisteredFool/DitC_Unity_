@@ -20,10 +20,14 @@ public class Health : MonoBehaviour
     [SerializeField] private float damageNumberOffset; //only works in y 
     [SerializeField] private float damageNumberLifespan;
     [SerializeField] private AudioClip hitSFX;
+    [SerializeField] private TextMeshProUGUI numericalHealth;
     private AudioSource audioSource;
     public void UpdateHealthbar(float currentValue, float maxValue)
     {
         healthBar.value = currentValue / maxValue;
+        
+        if (numericalHealth != null) 
+            numericalHealth.text = "Hp: " + currentValue + "/" + maxValue;
     }
 
     private void Start()
@@ -32,15 +36,13 @@ public class Health : MonoBehaviour
         health = maxHealth;
         UpdateHealthbar(health, maxHealth);
     }
-    public void ChangeHealth(float amount, bool flinch) //consider adding variables that dictate what color will be used and if it should cause a hurt animation, and maybe a sprite flash too
+    public void ChangeHealth(float amount, bool flinch, Color flavor) //consider adding variables that dictate what color will be used and if it should cause a hurt animation, and maybe a sprite flash too
     {
-        Debug.Log("Damage Happen");
-        //gSFXManager.instance.PlaySound(hitSFX, transform.position, 1);
         health += amount;
-
         float ex = transform.position.x + (UnityEngine.Random.Range(-0.75f,0.75f)); float why = transform.position.y + (UnityEngine.Random.Range(-0.75f, 0.75f) + damageNumberOffset);
         Vector2 pos = new Vector2(ex, why+4);
         damageNumber.GetComponent<TMP_Text>().text = (Mathf.Abs(amount)).ToString();
+        damageNumber.GetComponent<TMP_Text>().color = flavor;
         GameObject thatNumber = Instantiate(damageNumber, pos, Quaternion.identity); 
         Destroy(thatNumber, damageNumberLifespan);
 

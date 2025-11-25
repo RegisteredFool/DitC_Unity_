@@ -1,15 +1,16 @@
 using UnityEngine;
 
-public class PlayerAttackState : PlayerState
+public class PlayerSpecialState : PlayerState
 {
-    public PlayerAttackState(Player player) : base(player) { }
-
+    public PlayerSpecialState(Player player) : base(player) { }
     public override void Enter()
     {
         base.Enter();
 
-        //anim.SetBool("IsAttacking", true);
+        anim.SetBool("IsSpecialing", true);
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        player.dealtDamage = player.damage[1];
+        player.damageObjectCurrent = 1;
     }
     public override void FixedUpdate()
     {
@@ -18,11 +19,11 @@ public class PlayerAttackState : PlayerState
         if (player.moveInput.x != 0)
         {
             float speed = RunPressed ? player.runSpeed : player.normalSpeed;
-            rb.linearVelocity = new Vector2(speed * player.sideFacing, rb.linearVelocity.y);
-        } else
+            rb.linearVelocity = new Vector2(speed/2 * player.sideFacing, rb.linearVelocity.y);
+        }
+        else
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
     }
-
     public override void AnimationFinished()
     {
         //player.attackPressed = false;
@@ -31,10 +32,9 @@ public class PlayerAttackState : PlayerState
         else
             player.ChangeState(player.idleState);
     }
-    
     public override void Exit()
     {
         base.Exit();
-        anim.SetBool("IsAttacking", false);
+        anim.SetBool("IsSpecialing", false);
     }
 }
